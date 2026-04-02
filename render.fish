@@ -2,7 +2,12 @@
 
 set dir (path dirname (status filename))/latex
 
-pdflatex -interaction=nonstopmode -output-directory=$dir $dir/main.tex > /dev/null 2>&1
+# Export EERD from draw.io to PDF
+/Applications/draw.io.app/Contents/MacOS/draw.io --export --format pdf --crop --output $dir/eerd.pdf $dir/eerd.drawio 2>/dev/null
+and echo "Exported EERD"
+
+# Compile LaTeX (twice for references)
+and pdflatex -interaction=nonstopmode -output-directory=$dir $dir/main.tex > /dev/null 2>&1
 and pdflatex -interaction=nonstopmode -output-directory=$dir $dir/main.tex > /dev/null 2>&1
 and echo "Rendered: $dir/main.pdf"
 and open $dir/main.pdf

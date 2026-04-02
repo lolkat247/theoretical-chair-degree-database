@@ -11,6 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Export EERD
+        uses: rlespinasse/drawio-export-action@v2
+        with:
+          path: latex
+          format: pdf
+          transparent: false
+          output: .
+
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:
