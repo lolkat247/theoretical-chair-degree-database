@@ -1,5 +1,7 @@
 # TCD Stocking Inc. — Database Project
 
+[![Render LaTeX](https://github.com/lolkat247/theoretical-chair-degree-database/actions/workflows/render.yml/badge.svg)](https://github.com/lolkat247/theoretical-chair-degree-database/actions/workflows/render.yml)
+
 COP3710 Database 1, Professor Navarro
 
 [View the latest rendered PDF](https://github.com/lolkat247/theoretical-chair-degree-database/blob/build/proposal.pdf)
