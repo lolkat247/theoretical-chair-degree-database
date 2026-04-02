@@ -13,7 +13,9 @@ jobs:
 
       - name: Export EERD
         run: |
-          docker run --rm -v "$PWD/latex:/data" ghcr.io/rlespinasse/drawio-desktop-headless:latest xvfb-run drawio --export --format pdf --crop --output /data/eerd.pdf /data/eerd.drawio
+          docker run --rm -v "$PWD/latex:/data" rlespinasse/drawio-export:latest -f pdf
+          ls -la latex/export/
+          mv latex/export/eerd-EERD.pdf latex/eerd.pdf || mv latex/export/eerd*.pdf latex/eerd.pdf
           ls -la latex/eerd.pdf
 
       - name: Compile LaTeX
