@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//private/tmp/latex-formatting-options/**)",
+      "Bash(pdflatex -interaction=nonstopmode option_a_clean.tex)"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+\section{Problems and Constraints}
+
+\subsection{Problems}
+
+\begin{itemize}
+  \item \textbf{Order concurrency} -- Multiple warehouses may attempt to fulfill the same order
+    simultaneously, or a customer may place an order that must be split across locations. Without a
+    centralized system, there is no reliable way to coordinate stock allocation.
+  \item \textbf{Multi-location inventory tracking} -- The company operates three distribution
+    warehouses, each carrying a different subset of products. There is currently no unified view of
+    what is in stock and where.
+  \item \textbf{Shipping and import cost tracking} -- Each warehouse has its own flat shipping and
+    import costs. These costs are not systematically recorded, making it difficult to calculate
+    total cost of goods sold.
+  \item \textbf{ROI calculations} -- Without accurate cost data tied to individual products and
+    vendors, the company cannot determine which product lines or import sources are most profitable.
+  \item \textbf{Tax and accounting records} -- The company needs detailed, auditable transaction
+    history to support tax filings and financial reporting. Current record-keeping is insufficient.
+\end{itemize}
+
+\subsection{Constraints}
+
+\begin{itemize}
+  \item \textbf{Regulatory constraints} -- Imported food products are subject to federal and state
+    regulations. The system must be able to associate products with their country of origin and
+    vendor for traceability purposes.
+  \item \textbf{Geographic distribution} -- Three separate warehouse locations means the database
+    must handle location-specific inventory, shipping costs, and fulfillment logic.
+\end{itemize}
+
+\section{Objectives}
+
+\begin{itemize}
+  \item Establish a centralized source of truth for inventory, customer, vendor, and transaction data
+    across all three warehouse locations.
+  \item Minimize data redundancy through normalization to third normal form.
+  \item Maintain a detailed, time-variant transaction and invoice history to support accounting and
+    auditing needs.
+  \item Track product costs including import and shipping expenses to enable accurate profitability
+    analysis.
+  \item Record customer personal information and purchase history to support customer relationship
+    management.
+  \item Implement restock threshold tracking so warehouse managers can replenish inventory before
+    stockouts occur.
+\end{itemize}
