@@ -10,22 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Export EERD
-        uses: rlespinasse/drawio-export-action@v2
-        with:
-          path: latex
-          format: pdf
-          transparent: false
-          output: .
-          action-mode: reference
-
-      - name: Rename exported EERD
         run: |
-          ls -la latex/eerd*.pdf
-          mv latex/eerd-EERD.pdf latex/eerd.pdf || mv latex/eerd*.pdf latex/eerd.pdf
+          docker run --rm -v "$PWD/latex:/data" ghcr.io/rlespinasse/drawio-desktop-headless:latest xvfb-run drawio --export --format pdf --crop --output /data/eerd.pdf /data/eerd.drawio
+          ls -la latex/eerd.pdf
 
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
