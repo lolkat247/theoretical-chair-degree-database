@@ -1,0 +1,32 @@
+-- TCD Stocking Inc. - Cleanup Script
+-- Delete all data
+SET FOREIGN_KEY_CHECKS = 0;
+
+DELETE FROM Order_Status_History;
+DELETE FROM Order_Line;
+DELETE FROM Shipment;
+DELETE FROM `Order`;
+DELETE FROM Inventory;
+DELETE FROM Produce;
+DELETE FROM Meat;
+DELETE FROM Dairy;
+DELETE FROM Bakery;
+DELETE FROM Frozen;
+DELETE FROM Shelf_Stable;
+DELETE FROM Product;
+DELETE FROM Customer;
+DELETE FROM Warehouse;
+DELETE FROM Vendor;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Reset auto-increment counters
+ALTER TABLE Vendor AUTO_INCREMENT = 1;
+ALTER TABLE Warehouse AUTO_INCREMENT = 1;
+ALTER TABLE Customer AUTO_INCREMENT = 1;
+ALTER TABLE Product AUTO_INCREMENT = 1;
+ALTER TABLE Inventory AUTO_INCREMENT = 1;
+ALTER TABLE `Order` AUTO_INCREMENT = 1;
+ALTER TABLE Shipment AUTO_INCREMENT = 1;
+ALTER TABLE Order_Line AUTO_INCREMENT = 1;
+ALTER TABLE Order_Status_History AUTO_INCREMENT = 1;
