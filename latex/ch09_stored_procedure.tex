@@ -1,5 +1,41 @@
 \section{Stored Procedure}
 
 \subsection{SQL Code}
+{\scriptsize
+\begin{verbatim}
+CREATE PROCEDURE sp_customer_purchase_summary(IN min_unit_price DECIMAL(10,2))
+BEGIN
+    SELECT c.customer_id,
+           CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+           COUNT(DISTINCT o.order_id) AS order_count,
+           COUNT(ol.order_line_id) AS line_count,
+           SUM(ol.quantity) AS units_purchased,
+           ROUND(SUM(ol.quantity * ol.unit_price), 2) AS merchandise_total,
+           ROUND(AVG(ol.unit_price), 2) AS avg_unit_price
+    FROM Customer c
+    JOIN `Order` o ON o.customer_id = c.customer_id
+    JOIN Shipment s ON s.order_id = o.order_id
+    JOIN Order_Line ol ON ol.shipment_id = s.shipment_id
+    WHERE ol.unit_price > min_unit_price
+    GROUP BY c.customer_id, c.first_name, c.last_name
+    ORDER BY merchandise_total DESC, customer_name
+    LIMIT 15;
+END;
+
+CALL sp_customer_purchase_summary(10.00);
+\end{verbatim}
+}
 
 \subsection{Output}
+{\scriptsize
+\begin{verbatim}
+customer_id customer_name                 orders lines units total avg_price
+184         Generated184 Customer184      1      1     5     84.95 16.99
+319         Generated319 Customer319      1      1     5     84.95 16.99
+454         Generated454 Customer454      1      1     5     84.95 16.99
+49          Generated49 Customer49        1      1     5     84.95 16.99
+218         Generated218 Customer218      1      1     4     72.00 18.00
+353         Generated353 Customer353      1      1     4     72.00 18.00
+488         Generated488 Customer488      1      1     4     72.00 18.00
+\end{verbatim}
+}

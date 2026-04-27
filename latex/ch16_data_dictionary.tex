@@ -1,1 +1,28 @@
 \section{Data Dictionary}
+
+{\scriptsize
+\begin{verbatim}
+SELECT table_name, column_name, column_type, is_nullable,
+       column_key, column_default, extra, column_comment
+FROM information_schema.COLUMNS
+WHERE table_schema = 'tcd_stocking'
+ORDER BY table_name, ordinal_position;
+\end{verbatim}
+}
+
+Representative output is shown below. The complete output includes all base tables and views.
+
+{\scriptsize
+\begin{verbatim}
+table_name column_name     column_type        nullable key default extra
+Customer   customer_id     int(10) unsigned   NO       PRI NULL    auto_increment
+Customer   first_name      varchar(60)        NO           NULL
+Customer   last_name       varchar(60)        NO           NULL
+Customer   email           varchar(255)       YES      UNI NULL
+Order      order_id        int(10) unsigned   NO       PRI NULL    auto_increment
+Order_Line order_line_id   int(10) unsigned   NO       PRI NULL    auto_increment
+Product    product_id      int(10) unsigned   NO       PRI NULL    auto_increment
+Product    product_type    enum(...)          NO           NULL
+Shipment   shipment_id     int(10) unsigned   NO       PRI NULL    auto_increment
+\end{verbatim}
+}

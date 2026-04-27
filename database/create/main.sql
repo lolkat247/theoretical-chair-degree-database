@@ -33,3 +33,7 @@ SOURCE /sql/16_order_status_history.sql;
 
 -- Disjoint subtype enforcement
 SOURCE /sql/99_triggers.sql;
+
+-- Reporting objects
+SOURCE /sql/18_views.sql;
+SOURCE /sql/19_procedures.sql;

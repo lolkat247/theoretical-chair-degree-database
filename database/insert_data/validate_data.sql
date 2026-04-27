@@ -103,22 +103,22 @@ FROM Order_Line WHERE quantity <= 0;
 SELECT '=== LOGICAL CONSISTENCY ===' as check_type;
 
 -- Orders should have shipments
-SELECT 'Orders without shipments' as check, COUNT(*) as count
+SELECT 'Orders without shipments' as check_type, COUNT(*) as count
 FROM `Order` o 
 LEFT JOIN Shipment s ON o.order_id = s.order_id 
 WHERE s.shipment_id IS NULL;
 
 -- Shipments should have order lines
-SELECT 'Shipments without order lines' as check, COUNT(*) as count
+SELECT 'Shipments without order lines' as check_type, COUNT(*) as count
 FROM Shipment s 
 LEFT JOIN Order_Line ol ON s.shipment_id = ol.shipment_id 
 WHERE ol.order_line_id IS NULL;
 
 -- Orders should have status history
-SELECT 'Orders without status history' as check, COUNT(*) as count
+SELECT 'Orders without status history' as check_type, COUNT(*) as count
 FROM `Order` o 
 LEFT JOIN Order_Status_History osh ON o.order_id = osh.order_id 
-WHERE osh.order_status_history_id IS NULL;
+WHERE osh.status_history_id IS NULL;
 
 -- =========================================================
 -- 6. DATA VARIETY CHECK

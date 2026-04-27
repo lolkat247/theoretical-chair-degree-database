@@ -5,6 +5,7 @@
 
 set script_dir (path dirname (status filename))
 set sql_dir    $script_dir/create
+set seed_dir   $script_dir/insert_data
 set container  tcd-mariadb
 set image      mariadb:11.4
 set root_pw    root
@@ -19,6 +20,7 @@ docker run -d \
     -e MARIADB_ROOT_PASSWORD=$root_pw \
     -p 3306:3306 \
     -v $sql_dir:/sql:ro \
+    -v $seed_dir:/seed:ro \
     $image >/dev/null
 or begin
     echo "Failed to start container"
@@ -55,7 +57,28 @@ or begin
     exit 1
 end
 
-# 5. Sanity check — list created tables.
+# 5. Load seed data.
+echo "Loading seed data..."
+docker exec -i $container mariadb -uroot -p$root_pw -h 127.0.0.1 tcd_stocking < $seed_dir/insert_grocery_data.sql
+and echo "Seed data loaded successfully."
+or begin
+    echo "Seed data load failed."
+    exit 1
+end
+
+echo "Loading synthetic expansion data..."
+docker exec -i $container mariadb -uroot -p$root_pw -h 127.0.0.1 tcd_stocking < $seed_dir/expand_project_data.sql
+and echo "Synthetic expansion data loaded successfully."
+or begin
+    echo "Synthetic expansion data load failed."
+    exit 1
+end
+
+# 6. Sanity check — list created tables.
 echo ""
 echo "Tables in tcd_stocking:"
 docker exec $container mariadb -uroot -p$root_pw -h 127.0.0.1 -e "USE tcd_stocking; SHOW TABLES;"
+
+echo ""
+echo "Seed row counts:"
+docker exec $container mariadb -uroot -p$root_pw -h 127.0.0.1 tcd_stocking -e "SELECT 'Vendor' AS table_name, COUNT(*) AS row_count FROM Vendor UNION ALL SELECT 'Warehouse', COUNT(*) FROM Warehouse UNION ALL SELECT 'Customer', COUNT(*) FROM Customer UNION ALL SELECT 'Product', COUNT(*) FROM Product UNION ALL SELECT 'Produce', COUNT(*) FROM Produce UNION ALL SELECT 'Meat', COUNT(*) FROM Meat UNION ALL SELECT 'Dairy', COUNT(*) FROM Dairy UNION ALL SELECT 'Bakery', COUNT(*) FROM Bakery UNION ALL SELECT 'Deli', COUNT(*) FROM Deli UNION ALL SELECT 'Frozen', COUNT(*) FROM Frozen UNION ALL SELECT 'Shelf_Stable', COUNT(*) FROM Shelf_Stable UNION ALL SELECT 'Inventory', COUNT(*) FROM Inventory UNION ALL SELECT 'Order', COUNT(*) FROM `Order` UNION ALL SELECT 'Shipment', COUNT(*) FROM Shipment UNION ALL SELECT 'Order_Line', COUNT(*) FROM Order_Line UNION ALL SELECT 'Order_Status_History', COUNT(*) FROM Order_Status_History;"

@@ -1,1 +1,39 @@
 \section{Subquery with Arithmetic Operations}
+
+{\scriptsize
+\begin{verbatim}
+SELECT p.product_id, p.product_name, p.unit_price,
+       sales.units_sold, sales.gross_sales,
+       ROUND(sales.gross_sales / sales.units_sold, 2) AS average_realized_price,
+       ROUND((sales.gross_sales * 0.25), 2) AS estimated_profit_at_25_percent
+FROM Product p
+JOIN (
+    SELECT product_id,
+           SUM(quantity) AS units_sold,
+           ROUND(SUM(quantity * unit_price), 2) AS gross_sales
+    FROM Order_Line
+    GROUP BY product_id
+) sales ON sales.product_id = p.product_id
+WHERE sales.gross_sales > (
+    SELECT AVG(product_sales.total_sales)
+    FROM (
+        SELECT SUM(quantity * unit_price) AS total_sales
+        FROM Order_Line
+        GROUP BY product_id
+    ) product_sales
+)
+ORDER BY estimated_profit_at_25_percent DESC
+LIMIT 10;
+\end{verbatim}
+}
+
+{\scriptsize
+\begin{verbatim}
+product_id product_name    units_sold gross_sales avg_price est_profit_25
+49         Beef Ribeye     21         344.55      16.41     86.14
+83         Scallops        16         288.00      18.00     72.00
+43         Salmon Fillet   18         263.84      14.66     65.96
+53         Sirloin Steak   17         246.34      14.49     61.59
+84         Clams           20         240.00      12.00     60.00
+\end{verbatim}
+}

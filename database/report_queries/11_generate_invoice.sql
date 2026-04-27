@@ -1,7 +1,3 @@
-\section{Generating a New Invoice}
-
-{\scriptsize
-\begin{verbatim}
 START TRANSACTION;
 
 INSERT INTO `Order` (customer_id, order_date)
@@ -19,18 +15,18 @@ SELECT @shipment_id, product_id, 3, unit_price
 FROM Product
 WHERE product_id = 1;
 
-SELECT invoice_number, invoice_date, customer_name, subtotal,
-       shipping_amount, tax_amount, invoice_total
+INSERT INTO Order_Status_History (order_id, status, changed_at, notes)
+VALUES (@order_id, 'pending', '2026-04-26 09:00:00', 'Demonstration order created');
+
+SELECT
+    invoice_number,
+    invoice_date,
+    customer_name,
+    subtotal,
+    shipping_amount,
+    tax_amount,
+    invoice_total
 FROM vw_order_totals
 WHERE order_id = @order_id;
 
 ROLLBACK;
-\end{verbatim}
-}
-
-{\scriptsize
-\begin{verbatim}
-invoice_number invoice_date customer_name  subtotal shipping tax  invoice_total
-ORD-000532     2026-04-26   Alice Johnson  13.80    25.00    1.00 39.80
-\end{verbatim}
-}

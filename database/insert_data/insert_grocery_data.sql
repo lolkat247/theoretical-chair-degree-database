@@ -345,6 +345,51 @@ INSERT INTO Shelf_Stable (product_id, expiration_date, packaging_type, shelf_lif
 (114, '2026-04-26', 'Bottle', 12, FALSE, 32),
 (115, '2026-04-26', 'Bottle', 12, FALSE, 28);
 
+-- DELI
+INSERT INTO Product (product_name, product_type, unit_price, weight, vendor_id) VALUES
+('Smoked Turkey', 'Deli', 8.75, 0.500, 5),
+('Black Forest Ham', 'Deli', 7.80, 0.500, 5),
+('Genoa Salami', 'Deli', 9.50, 0.400, 11),
+('Roast Beef Slices', 'Deli', 10.25, 0.500, 5),
+('Pastrami', 'Deli', 10.75, 0.500, 11),
+('Mortadella', 'Deli', 8.25, 0.400, 15),
+('Prosciutto', 'Deli', 14.00, 0.250, 15),
+('Capicola', 'Deli', 12.50, 0.300, 15),
+('Chicken Salad', 'Deli', 6.75, 0.500, 9),
+('Tuna Salad', 'Deli', 6.50, 0.500, 28),
+('Egg Salad', 'Deli', 5.25, 0.500, 17),
+('Potato Salad', 'Deli', 4.75, 0.500, 9),
+('Macaroni Salad', 'Deli', 4.50, 0.500, 9),
+('Coleslaw', 'Deli', 3.80, 0.500, 9),
+('Bologna', 'Deli', 5.50, 0.500, 5),
+('Corned Beef', 'Deli', 11.25, 0.500, 11),
+('Pepperoni', 'Deli', 7.25, 0.300, 11),
+('Swiss Deli Cheese', 'Deli', 8.95, 0.500, 11),
+('Provolone Slices', 'Deli', 7.95, 0.500, 15),
+('Olive Tapenade', 'Deli', 6.25, 0.250, 12);
+
+INSERT INTO Deli (product_id, slice_thickness, is_prepackaged, serving_size, cure_method, sodium_content) VALUES
+(116, 1.50, TRUE, '4 oz', 'Smoked', 720.00),
+(117, 1.50, TRUE, '4 oz', 'Smoked', 840.00),
+(118, 1.25, TRUE, '3 oz', 'Dry cured', 980.00),
+(119, 1.50, TRUE, '4 oz', 'Roasted', 760.00),
+(120, 1.50, TRUE, '4 oz', 'Brined', 890.00),
+(121, 1.25, TRUE, '3 oz', 'Cured', 780.00),
+(122, 0.75, TRUE, '2 oz', 'Dry cured', 900.00),
+(123, 1.00, TRUE, '3 oz', 'Cured', 820.00),
+(124, NULL, TRUE, '4 oz', 'Prepared salad', 410.00),
+(125, NULL, TRUE, '4 oz', 'Prepared salad', 390.00),
+(126, NULL, TRUE, '4 oz', 'Prepared salad', 360.00),
+(127, NULL, TRUE, '4 oz', 'Prepared salad', 320.00),
+(128, NULL, TRUE, '4 oz', 'Prepared salad', 330.00),
+(129, NULL, TRUE, '4 oz', 'Prepared salad', 240.00),
+(130, 1.50, TRUE, '4 oz', 'Cured', 700.00),
+(131, 1.50, TRUE, '4 oz', 'Brined', 880.00),
+(132, 1.00, TRUE, '3 oz', 'Cured', 760.00),
+(133, 1.50, TRUE, '4 oz', 'Aged', 120.00),
+(134, 1.50, TRUE, '4 oz', 'Aged', 140.00),
+(135, NULL, TRUE, '2 oz', 'Prepared spread', 300.00);
+
 -- =========================================================
 -- INVENTORY DATA
 -- =========================================================
@@ -463,7 +508,27 @@ INSERT INTO Inventory (warehouse_id, product_id, quantity, restock_threshold, la
 (2, 112, 56, 48, '2025-05-26'),
 (3, 113, 39, 35, '2025-05-27'),
 (4, 114, 82, 70, '2025-05-28'),
-(5, 115, 27, 25, '2025-05-29');
+(5, 115, 27, 25, '2025-05-29'),
+(6, 116, 44, 30, '2025-05-30'),
+(7, 117, 52, 35, '2025-05-30'),
+(8, 118, 37, 25, '2025-05-30'),
+(9, 119, 41, 28, '2025-05-30'),
+(10, 120, 36, 24, '2025-05-30'),
+(1, 121, 55, 40, '2025-05-31'),
+(2, 122, 28, 20, '2025-05-31'),
+(3, 123, 33, 22, '2025-05-31'),
+(4, 124, 47, 32, '2025-05-31'),
+(5, 125, 50, 35, '2025-05-31'),
+(6, 126, 39, 25, '2025-06-01'),
+(7, 127, 62, 45, '2025-06-01'),
+(8, 128, 43, 30, '2025-06-01'),
+(9, 129, 58, 40, '2025-06-01'),
+(10, 130, 31, 22, '2025-06-01'),
+(1, 131, 35, 25, '2025-06-02'),
+(2, 132, 46, 32, '2025-06-02'),
+(3, 133, 49, 34, '2025-06-02'),
+(4, 134, 53, 38, '2025-06-02'),
+(5, 135, 40, 28, '2025-06-02');
 
 -- =========================================================
 -- ORDER DATA (Fabricated - 20+ orders for customer interaction)
@@ -657,4 +722,3 @@ INSERT INTO Order_Status_History (order_id, status, changed_at, notes) VALUES
 (20, 'pending', '2025-06-01 11:45:00', 'Order placed'),
 (20, 'processing', '2025-06-01 15:15:00', 'Processing order'),
 (20, 'unable_to_fulfill', '2025-06-02 09:00:00', 'Unable to fulfill - warehouse inventory damaged in incident');
-

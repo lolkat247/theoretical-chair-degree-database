@@ -1,5 +1,25 @@
 \section{Current Inventory by Product Type}
 
 \subsection{SQL Code}
+{\scriptsize
+\begin{verbatim}
+SELECT warehouse_name, product_id, product_name, product_type,
+       vendor_name, quantity, restock_threshold, inventory_status
+FROM vw_current_inventory
+WHERE product_type = 'Deli'
+ORDER BY warehouse_name, product_name;
+\end{verbatim}
+}
 
 \subsection{Query Output}
+{\scriptsize
+\begin{verbatim}
+warehouse_name          product_id product_name       vendor_name quantity threshold status
+Anniversary Crossing    126        Egg Salad          Bluezoom    39       25        OK
+Anniversary Crossing    116        Smoked Turkey      Katz        44       30        OK
+Dottie Avenue Center    130        Bologna            Katz        31       22        OK
+Dottie Avenue Center    120        Pastrami           Gabcube     36       24        OK
+Graedel Street Hub      123        Capicola           Cogilith    33       22        OK
+Graedel Street Hub      133        Swiss Deli Cheese  Gabcube     49       34        OK
+\end{verbatim}
+}

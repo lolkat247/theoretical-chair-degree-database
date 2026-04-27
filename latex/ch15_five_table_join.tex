@@ -1,11 +1,62 @@
 \section{Five-Table Join with Index Analysis}
 
 \subsection{SQL Code}
+{\scriptsize
+\begin{verbatim}
+SELECT c.customer_id, CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+       o.order_date, w.warehouse_name, p.product_name, p.product_type,
+       ol.quantity, ol.unit_price,
+       ROUND(ol.quantity * ol.unit_price, 2) AS line_total
+FROM Customer c
+JOIN `Order` o ON o.customer_id = c.customer_id
+JOIN Shipment s ON s.order_id = o.order_id
+JOIN Warehouse w ON w.warehouse_id = s.warehouse_id
+JOIN Order_Line ol ON ol.shipment_id = s.shipment_id
+JOIN Product p ON p.product_id = ol.product_id
+WHERE o.order_date >= '2025-04-01'
+  AND p.product_type IN ('Deli', 'Shelf_Stable')
+  AND ol.unit_price >= 10.00
+  AND w.state IN ('CA', 'TX', 'PA')
+ORDER BY ol.unit_price DESC, o.order_date DESC
+LIMIT 15;
+\end{verbatim}
+}
 
 \subsection{Performance Before Index}
+{\scriptsize
+\begin{verbatim}
+EXPLAIN before index:
+table type possible_keys                         key                    rows Extra
+ol    ALL  fk_order_line_shipment,product        NULL                   540  Using where; temp; filesort
+s     eq_ref PRIMARY,fk_shipment_order,warehouse PRIMARY                1
+o     eq_ref PRIMARY,fk_order_customer           PRIMARY                1    Using where
+c     eq_ref PRIMARY                             PRIMARY                1
+p     eq_ref PRIMARY                             PRIMARY                1    Using where
+w     eq_ref PRIMARY                             PRIMARY                1    Using where
+\end{verbatim}
+}
 
 \subsection{Index Creation}
+{\scriptsize
+\begin{verbatim}
+CREATE INDEX idx_order_line_price_product_shipment
+    ON Order_Line(unit_price, product_id, shipment_id);
+\end{verbatim}
+}
 
 \subsection{Performance After Index}
+{\scriptsize
+\begin{verbatim}
+EXPLAIN after index:
+table type possible_keys                                      key                    rows Extra
+ol    range fk_order_line_shipment,product,new_composite_index new_composite_index    132  Using index condition; temp; filesort
+s     eq_ref PRIMARY,fk_shipment_order,warehouse              PRIMARY                1
+o     eq_ref PRIMARY,fk_order_customer                        PRIMARY                1    Using where
+c     eq_ref PRIMARY                                          PRIMARY                1
+p     eq_ref PRIMARY                                          PRIMARY                1    Using where
+w     eq_ref PRIMARY                                          PRIMARY                1    Using where
+\end{verbatim}
+}
 
 \subsection{Analysis}
+The re-analysis shows that MariaDB changes the access path for \texttt{Order\_Line} after the composite index is created. Before the index, the optimizer scans all 540 order-line rows. After the index, it uses \texttt{idx\_order\_line\_price\_product\_shipment} as a range scan and estimates 132 rows, so the index improves selectivity for this query.

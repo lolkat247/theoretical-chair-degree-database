@@ -1,5 +1,34 @@
 \section{Inventory Sold Within Date Range}
 
 \subsection{SQL Code}
+{\scriptsize
+\begin{verbatim}
+SELECT p.product_id, p.product_name, p.product_type,
+       SUM(ol.quantity) AS units_sold_in_range,
+       SUM(i.quantity) AS current_units_on_hand,
+       MIN(o.order_date) AS first_sale_in_range,
+       MAX(o.order_date) AS last_sale_in_range
+FROM Product p
+JOIN Order_Line ol ON ol.product_id = p.product_id
+JOIN Shipment s ON s.shipment_id = ol.shipment_id
+JOIN `Order` o ON o.order_id = s.order_id
+JOIN Inventory i ON i.product_id = p.product_id
+WHERE o.order_date BETWEEN '2025-04-01' AND '2025-06-30'
+GROUP BY p.product_id, p.product_name, p.product_type
+ORDER BY units_sold_in_range DESC, p.product_name
+LIMIT 25;
+\end{verbatim}
+}
 
 \subsection{Query Output}
+{\scriptsize
+\begin{verbatim}
+product_id product_name      product_type units_sold current_on_hand first_sale last_sale
+38         Buttermilk        Dairy        6          200             2025-04-20 2025-06-18
+24         Cheddar Cheese    Dairy        6          62              2025-04-02 2025-06-04
+43         Salmon Fillet     Meat         6          58              2025-06-01 2025-06-23
+49         Beef Ribeye       Meat         5          44              2025-06-29 2025-06-29
+34         Butter            Dairy        5          35              2025-06-14 2025-06-14
+33         Cream Cheese      Dairy        5          44              2025-05-22 2025-06-13
+\end{verbatim}
+}

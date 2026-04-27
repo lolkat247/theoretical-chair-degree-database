@@ -1,5 +1,35 @@
 \section{Virtual Table}
 
 \subsection{SQL Code}
+{\scriptsize
+\begin{verbatim}
+CREATE OR REPLACE VIEW vw_order_totals AS
+SELECT o.order_id,
+       CONCAT('ORD-', LPAD(o.order_id, 6, '0')) AS invoice_number,
+       o.order_date AS invoice_date,
+       o.order_date, c.customer_id,
+       CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+       ROUND(SUM(ol.quantity * ol.unit_price), 2) AS subtotal,
+       ROUND(SUM(DISTINCT w.shipping_cost), 2) AS shipping_amount,
+       ROUND(SUM(ol.quantity * ol.unit_price) * 0.0725, 2) AS tax_amount,
+       ROUND(SUM(ol.quantity * ol.unit_price) + SUM(DISTINCT w.shipping_cost)
+             + (SUM(ol.quantity * ol.unit_price) * 0.0725), 2) AS invoice_total
+FROM `Order` o
+JOIN Customer c ON c.customer_id = o.customer_id
+JOIN Shipment s ON s.order_id = o.order_id
+JOIN Warehouse w ON w.warehouse_id = s.warehouse_id
+JOIN Order_Line ol ON ol.shipment_id = s.shipment_id
+GROUP BY o.order_id, o.order_date, c.customer_id, c.first_name, c.last_name;
+\end{verbatim}
+}
 
 \subsection{Output}
+{\scriptsize
+\begin{verbatim}
+invoice_number invoice_date customer_name              subtotal shipping tax  total
+ORD-000454     2026-08-08   Generated454 Customer454   84.95    28.00    6.16 119.11
+ORD-000184     2025-11-11   Generated184 Customer184   84.95    28.00    6.16 119.11
+ORD-000319     2026-03-26   Generated319 Customer319   84.95    25.00    6.16 116.11
+ORD-000049     2025-06-29   Generated49 Customer49    84.95    25.00    6.16 116.11
+\end{verbatim}
+}

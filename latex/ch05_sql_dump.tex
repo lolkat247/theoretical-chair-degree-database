@@ -1,1 +1,28 @@
 \section{Database Schema (SQL Dump)}
+
+The complete SQL dump was generated with \texttt{mariadb-dump} and saved as \\
+\texttt{database/tcd\_stocking\_dump.sql}. The first page of the dump is shown below.
+
+{\scriptsize
+\begin{verbatim}
+-- MariaDB dump 10.19-11.4.10-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: 127.0.0.1    Database: tcd_stocking
+-- ------------------------------------------------------
+-- Server version 11.4.10-MariaDB-ubu2404
+
+DROP TABLE IF EXISTS `Bakery`;
+CREATE TABLE `Bakery` (
+  `product_id` int(10) unsigned NOT NULL,
+  `is_gluten_free` tinyint(1) NOT NULL DEFAULT 0,
+  `shelf_life_days` int(10) unsigned DEFAULT NULL,
+  `contains_nuts` tinyint(1) NOT NULL DEFAULT 0,
+  `serving_size` varchar(50) DEFAULT NULL,
+  `bake_date` date DEFAULT NULL,
+  PRIMARY KEY (`product_id`),
+  CONSTRAINT `fk_bakery_product`
+    FOREIGN KEY (`product_id`) REFERENCES `Product` (`product_id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+\end{verbatim}
+}
